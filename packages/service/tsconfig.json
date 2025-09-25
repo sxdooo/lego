@@ -3,6 +3,7 @@
   "compilerOptions": {
     // File Layout
     // "rootDir": "./src",
+    "allowJs": true,
     "outDir": "./dist",
 
     // Environment Settings
