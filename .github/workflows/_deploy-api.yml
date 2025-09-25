@@ -30,10 +30,11 @@ jobs:
           script: |
             set -e
             cd /opt/lego
-            # 万能清 4000
+            # 1. 万能清 4000 + 强制删旧容器（放最前）
             fuser -k 4000/tcp 2>/dev/null || true
-            docker ps -a | grep :4000 | awk '{print $1}' | xargs -r docker stop || true
-            docker ps -a | grep :4000 | awk '{print $1}' | xargs -r docker rm   || true
-            # 导入 & 启动
+            docker rm -f lego-api 2>/dev/null || true
+            docker ps -a | grep :4000 | awk '{print $1}' | xargs -r docker rm -f || true
+            # 2. 导入新镜像
             docker load -i lego-api.tar.gz
+            # 3. 启动
             docker run -d --name lego-api --restart=always -p 4000:4000 lego:api
