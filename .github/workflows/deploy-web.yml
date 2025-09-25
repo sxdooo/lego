@@ -50,10 +50,6 @@ jobs:
             docker load -i lego-web.tar.gz
             # 强制清掉旧容器
             docker stop lego-web 2>/dev/null || true
-            docker rm   lego-web 2>/dev/null || true
+            docker rm -f lego-web 2>/dev/null || true   # 强制删旧
             # 再启动新容器
-            docker run -d \
-              --name lego-web \
-              --restart=always \
-              -p 3000:80 \
-              lego:web
+            docker run -d --name lego-web --restart=always -p 3000:80 lego:web
