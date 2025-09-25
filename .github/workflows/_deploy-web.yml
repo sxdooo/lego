@@ -30,12 +30,13 @@ jobs:
           script: |
             set -e
             cd /opt/lego
-            # 万能清 3000
+            # 1. 先强制释放 3000（不管谁占）
             fuser -k 3000/tcp 2>/dev/null || true
             pm2 stop demo 2>/dev/null || true
             pm2 delete demo 2>/dev/null || true
-            docker ps -a | grep :3000 | awk '{print $1}' | xargs -r docker stop || true
-            docker ps -a | grep :3000 | awk '{print $1}' | xargs -r docker rm   || true
-            # 导入 & 启动
+            # 2. 清掉所有可能残留的容器（强制）
+            docker rm -f lego-web 2>/dev/null || true
+            docker ps -a | grep :3000 | awk '{print $1}' | xargs -r docker rm -f || true
+            # 3. 再导入 & 启动新容器
             docker load -i lego-web.tar.gz
             docker run -d --name lego-web --restart=always -p 3000:80 lego:web
