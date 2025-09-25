@@ -1,0 +1,41 @@
+name: _DeployWeb
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build front-end image
+        run: docker build -f Dockerfile.web -t lego:web .
+      - name: Save image
+        run: docker save lego:web | gzip > lego-web.tar.gz
+      - name: SCP upload
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 8.140.26.176
+          username: root
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          source: lego-web.tar.gz
+          target: /opt/lego/
+      - name: Reload container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 8.140.26.176
+          username: root
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/lego
+            # 万能清 3000
+            fuser -k 3000/tcp 2>/dev/null || true
+            pm2 stop demo 2>/dev/null || true
+            pm2 delete demo 2>/dev/null || true
+            docker ps -a | grep :3000 | awk '{print $1}' | xargs -r docker stop || true
+            docker ps -a | grep :3000 | awk '{print $1}' | xargs -r docker rm   || true
+            # 导入 & 启动
+            docker load -i lego-web.tar.gz
+            docker run -d --name lego-web --restart=always -p 3000:80 lego:web

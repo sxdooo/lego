@@ -1,0 +1,39 @@
+name: _DeployAPI
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build back-end image
+        run: docker build -f Dockerfile.api -t lego:api .
+      - name: Save image
+        run: docker save lego:api | gzip > lego-api.tar.gz
+      - name: SCP upload
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 8.140.26.176
+          username: root
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          source: lego-api.tar.gz
+          target: /opt/lego/
+      - name: Reload container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 8.140.26.176
+          username: root
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/lego
+            # 万能清 4000
+            fuser -k 4000/tcp 2>/dev/null || true
+            docker ps -a | grep :4000 | awk '{print $1}' | xargs -r docker stop || true
+            docker ps -a | grep :4000 | awk '{print $1}' | xargs -r docker rm   || true
+            # 导入 & 启动
+            docker load -i lego-api.tar.gz
+            docker run -d --name lego-api --restart=always -p 4000:4000 lego:api

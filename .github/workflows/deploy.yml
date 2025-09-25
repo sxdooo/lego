@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      front: ${{ steps.filter.outputs.front }}
+      back:  ${{ steps.filter.outputs.back }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            front:
+              - 'packages/product/**'
+              - 'Dockerfile.web'
+              - '.github/workflows/deploy.yml'
+              - '.github/workflows/_deploy-web.yml'
+            back:
+              - 'packages/service/**'
+              - 'Dockerfile.api'
+              - '.github/workflows/deploy.yml'
+              - '.github/workflows/_deploy-api.yml'
+
+  front:
+    needs: changes
+    if: ${{ needs.changes.outputs.front == 'true' }}
+    uses: ./.github/workflows/_deploy-web.yml
+    secrets: inherit
+
+  back:
+    needs: changes
+    if: ${{ needs.changes.outputs.back == 'true' }}
+    uses: ./.github/workflows/_deploy-api.yml
+    secrets: inherit
