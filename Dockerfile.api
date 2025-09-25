@@ -1,0 +1,19 @@
+# ====== 1. 构建阶段 ======
+FROM node:22-alpine AS builder
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+WORKDIR /lego
+COPY package.json pnpm-lock.yaml ./
+COPY packages/server/package.json ./packages/server/
+RUN pnpm install --frozen-lockfile
+COPY . .
+RUN pnpm --filter service build      # 必须输出到 packages/server/dist
+
+# ====== 2. 运行阶段 ======
+FROM node:22-alpine
+WORKDIR /lego
+COPY --from=builder /lego/packages/server/dist ./dist
+COPY --from=builder /lego/node_modules ./node_modules
+EXPOSE 4000
+CMD ["node", "dist/index.js"]

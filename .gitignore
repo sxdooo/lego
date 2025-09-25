@@ -1,0 +1,6 @@
+cat >> .gitignore <<'EOF'
+# 构建产物
+packages/*/dist
+dist/
+*.tar.gz
+EOF
