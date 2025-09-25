@@ -14,17 +14,13 @@ RUN pnpm --filter service build      # 输出到 packages/service/dist
 FROM node:22-alpine
 WORKDIR /lego
 
-# 1) 复制构建产物
+# 1) 构建产物
 COPY --from=builder /lego/packages/service/dist ./dist
-# 复制锁文件 + 根包描述（让 pnpm 能找到锁）
+# 2) 锁文件 + 根模块（关键）
 COPY --from=builder /lego/package.json /lego/pnpm-lock.yaml ./
-
-# 再复制子包 json
+COPY --from=builder /lego/node_modules ./node_modules
+# 3) 子包 json（让 pnpm 认识）
 COPY --from=builder /lego/packages/service/package.json ./packages/service/
-
-# 安装生产依赖（去掉 --frozen-lockfile，因为锁文件已存在）
-RUN corepack enable && \
-    pnpm install --prod --filter service
 
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
