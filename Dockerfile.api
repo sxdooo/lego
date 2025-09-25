@@ -2,8 +2,8 @@
 FROM node:22-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
-
 WORKDIR /lego
+
 COPY package.json pnpm-lock.yaml ./
 COPY packages/service/package.json ./packages/service/
 RUN pnpm install --frozen-lockfile
@@ -16,11 +16,10 @@ WORKDIR /lego
 
 # 1) 构建产物
 COPY --from=builder /lego/packages/service/dist ./dist
-# 2) 锁文件 + 根模块（关键）
-COPY --from=builder /lego/package.json /lego/pnpm-lock.yaml ./
+# 2) 整个 node_modules（一次性解决所有依赖）
 COPY --from=builder /lego/node_modules ./node_modules
-# 3) 子包 json（让 pnpm 认识）
-COPY --from=builder /lego/packages/service/package.json ./packages/service/
+# 3) 锁文件（可选，保留）
+COPY --from=builder /lego/package.json /lego/pnpm-lock.yaml ./
 
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
