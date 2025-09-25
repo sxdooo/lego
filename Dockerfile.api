@@ -16,11 +16,15 @@ WORKDIR /lego
 
 # 1) 复制构建产物
 COPY --from=builder /lego/packages/service/dist ./dist
-# 2) 复制锁文件 & 重装生产依赖（只装 api 需要的）
+# 复制锁文件 + 根包描述（让 pnpm 能找到锁）
 COPY --from=builder /lego/package.json /lego/pnpm-lock.yaml ./
+
+# 再复制子包 json
 COPY --from=builder /lego/packages/service/package.json ./packages/service/
+
+# 安装生产依赖（去掉 --frozen-lockfile，因为锁文件已存在）
 RUN corepack enable && \
-    pnpm install --prod --frozen-lockfile --filter service
+    pnpm install --prod --filter service
 
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
