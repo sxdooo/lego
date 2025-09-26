@@ -36,7 +36,7 @@ export default function Home() {
                 </>
               }
             >
-              <MenuItem key='flow'>Flow</MenuItem>
+              <MenuItem key='flow'>Flow1</MenuItem>
             </SubMenu>
           </Menu>
         </div>
