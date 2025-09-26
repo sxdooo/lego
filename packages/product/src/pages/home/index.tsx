@@ -32,7 +32,7 @@ export default function Home() {
               key='0'
               title={
                 <>
-                  <IconApps /> Navigation 1
+                  <IconApps /> Navigation
                 </>
               }
             >
