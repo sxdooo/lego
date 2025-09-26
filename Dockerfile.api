@@ -8,6 +8,7 @@ COPY packages/service/package.json ./packages/service/
 
 # 1) 装根 + 子包（关键：显式 filter 装，确保链接正确）
 RUN pnpm install --frozen-lockfile
+RUN pnpm install --filter service
 # 2) 再拷源码 & 构建
 COPY . .
 RUN pnpm --filter service build      # 输出到 packages/service/dist
