@@ -20,5 +20,9 @@ export default function Router() {
       path: 'page/:pageId',
       element: <PageViewer />,
     },
+    {
+      path: 'page/editor',
+      element: <Editor />,
+    },
   ]);
 }
