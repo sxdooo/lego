@@ -1,9 +1,9 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Menu } from '@arco-design/web-react';
 import { IconApps } from '@arco-design/web-react/icon';
 import {
   Layout,
   Card,
+  Menu,
 } from '@arco-design/web-react';
 import HeaderBox from './HeaderBox';
 import styles from './index.module.scss';

@@ -1,0 +1,18 @@
+{
+  "name": "@lego/components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/ComponentRenderer.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.4.1",
+  "dependencies": {
+    "@arco-design/web-react": "^2.66.5",
+    "@lego/utils": "workspace:*",
+    "@lego/core": "workspace:*"
+  }
+}

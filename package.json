@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":  "pnpm --filter product dev",
-    "startService":  "pnpm --filter service dev",
-    "build":"pnpm --filter product build",
+    "dev": "pnpm --filter product dev",
+    "startService": "pnpm --filter service dev",
+    "build": "pnpm --filter product build",
     "lint": "pnpm -r lint",
     "type-check": "pnpm -r type-check"
   },
@@ -17,7 +17,8 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@types/react": "^19.1.13",
