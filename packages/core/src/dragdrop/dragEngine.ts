@@ -1,4 +1,4 @@
-import { BaseComponent } from '@lego/utils';
+import type { BaseComponent } from '@lego/utils';
 import { eventHub } from '@lego/event-hub';
 
 export class DragEngine {

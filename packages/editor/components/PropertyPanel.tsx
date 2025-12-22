@@ -76,7 +76,7 @@ export const PropertyPanel: React.FC = () => {
     }
   };
 
-  const handleStyleChange = (styleKey: string, value: string) => {
+  const handleStyleChange = (styleKey: string, value: string | any[]) => {
     if (!selectedComponent) return;
     const currentStyle = selectedComponent.props?.style || {};
     updateComponent(selectedComponent.id, {

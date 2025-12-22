@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentNode } from '@lego/utils';
+import type { ComponentNode } from '@lego/utils';
 import { Input } from '@arco-design/web-react';
 import styled from 'styled-components';
 

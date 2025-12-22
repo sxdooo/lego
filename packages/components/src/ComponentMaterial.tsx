@@ -1,6 +1,7 @@
 import React from 'react';
-// import { ComponentMaterial as ComponentMaterialType } from '@lego/utils';
 import { useEditorStore } from '@lego/core/src/store/editorStore';
+import { generateId } from '@lego/utils';
+import type { BaseComponent } from '@lego/utils';
 
 interface ComponentMaterialProps {
   material: any;
@@ -10,7 +11,8 @@ export const ComponentMaterial: React.FC<ComponentMaterialProps> = ({ material }
   const { setDraggingComponent } = useEditorStore();
 
   const handleDragStart = (e: React.DragEvent) => {
-    const component = {
+    const component: BaseComponent = {
+      id: generateId(),
       type: material.type,
       props: { ...material.defaultProps },
     };

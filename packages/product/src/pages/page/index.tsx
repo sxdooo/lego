@@ -1,9 +1,16 @@
 import { Fragment, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPage, type PageRecord } from '../../services/pageApi';
 import { COMPONENT_TYPES } from '@lego/utils';
+import type { ComponentNode } from '@lego/utils';
 
-const renderPreviewComponent = (component: any): JSX.Element => {
+type OptionItem = {
+  label?: string;
+  value?: string;
+};
+
+const renderPreviewComponent = (component: ComponentNode): ReactNode => {
   const props = component.props ?? {};
   const style = props.style ?? {};
 
@@ -23,20 +30,27 @@ const renderPreviewComponent = (component: any): JSX.Element => {
           disabled
         />
       );
-    case COMPONENT_TYPES.SELECT:
+    case COMPONENT_TYPES.SELECT: {
+      const options = Array.isArray(props.options)
+        ? (props.options as OptionItem[])
+        : [];
       return (
         <select style={style} disabled defaultValue={props.value ?? ''}>
-          {Array.isArray(props.options)
-            ? props.options.map((option: any) => (
-              <option key={option.value ?? option.label} value={option.value}>
-                {option.label}
+          {options.length > 0 ? (
+            options.map((option) => (
+              <option
+                key={option.value ?? option.label ?? 'option'}
+                value={option.value ?? ''}
+              >
+                {option.label ?? option.value}
               </option>
             ))
-            : (
-              <option value='' disabled>暂无选项</option>
-            )}
+          ) : (
+            <option value='' disabled>暂无选项</option>
+          )}
         </select>
       );
+    }
     case COMPONENT_TYPES.TEXTAREA:
       return (
         <textarea
@@ -51,7 +65,7 @@ const renderPreviewComponent = (component: any): JSX.Element => {
     case COMPONENT_TYPES.FORM:
       return (
         <div style={style}>
-          {component.children?.map((child) => (
+          {component.children?.map((child: ComponentNode) => (
             <Fragment key={child.id}>
               {renderPreviewComponent(child)}
             </Fragment>
@@ -67,7 +81,7 @@ const renderPreviewComponent = (component: any): JSX.Element => {
   }
 };
 
-const renderComponentTree = (components: any[]) => (
+const renderComponentTree = (components: ComponentNode[]) => (
   components.map((component) => (
     <Fragment key={component.id}>
       {renderPreviewComponent(component)}

@@ -4,7 +4,7 @@ import { ComponentRenderer } from '@lego/components';
 // import { ComponentNode } from '@lego/utils';
 
 export const EditorCanvas: React.FC = () => {
-  const { components, addComponent, selectComponent, draggingComponent } = useEditorStore();
+  const { components, addComponent, selectComponent } = useEditorStore();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();

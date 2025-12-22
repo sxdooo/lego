@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { ComponentNode, BaseComponent } from '@lego/utils';
-import { generateId, deepClone } from '@lego/utils';
+import { generateId } from '@lego/utils';
+import type { ComponentNode, BaseComponent } from '@lego/utils';
 
 interface EditorState {
   components: ComponentNode[];

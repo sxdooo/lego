@@ -1,4 +1,4 @@
-import { ComponentMaterial } from '@lego/utils';
+import type { ComponentMaterial } from '@lego/utils';
 import { COMPONENT_TYPES } from '@lego/utils';
 
 export const selectMaterial: ComponentMaterial = {

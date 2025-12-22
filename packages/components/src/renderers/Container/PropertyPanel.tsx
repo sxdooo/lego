@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseComponent } from '@lego/utils';
+import type { BaseComponent } from '@lego/utils';
 import { Input } from '@arco-design/web-react';
 
 interface ContainerPropertyPanelProps {
