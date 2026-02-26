@@ -15,5 +15,9 @@
     "@lego/core": "workspace:*",
     "@lego/components": "workspace:*",
     "@lego/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18 <19",
+    "react-dom": ">=18 <19"
   }
 }

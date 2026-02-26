@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Input, Message, Switch, Tabs } from '@arco-design/web-react';
+import { Button, Input, Message, Radio, Switch } from '@arco-design/web-react';
 import { VisualEditor } from '@lego/editor';
 import { PropertyPanel } from '@lego/editor';
 import { useEditorStore } from '@lego/core/src/store/editorStore';
 import type { ComponentNode } from '@lego/utils';
 import { fetchPage, type PageRecord, updatePage } from '../../services/pageApi';
 import { RuntimePreview } from './RuntimePreview';
-
-const TabPane = Tabs.TabPane;
 
 export default function PageViewer() {
   const { pageId } = useParams();
@@ -84,15 +82,15 @@ export default function PageViewer() {
       <div style={{ padding: '10px 12px', background: '#fff', borderBottom: '1px solid #eee' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-            <Tabs
-              activeTab={tabKey}
-              onChange={(key) => setTabKey(key as 'edit' | 'preview')}
-              type="text"
+            <Radio.Group
+              type="button"
               size="small"
+              value={tabKey}
+              onChange={(val) => setTabKey(val as 'edit' | 'preview')}
             >
-              <TabPane key="edit" title="编辑" />
-              <TabPane key="preview" title="预览" />
-            </Tabs>
+              <Radio value="edit">编辑</Radio>
+              <Radio value="preview">预览</Radio>
+            </Radio.Group>
             <Input
               style={{ width: 280 }}
               value={pageName}

@@ -1,11 +1,9 @@
 import React from 'react';
 import type { ComponentNode } from '@lego/utils';
-import { Input } from '@arco-design/web-react';
-import styled from 'styled-components';
-
-const LabelDiv = styled.div`
-  margin: 5px 0;
-`;
+import { Input, Switch } from '@arco-design/web-react';
+const LabelDiv: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
+  <div style={{ margin: '5px 0', ...(style || {}) }}>{children}</div>
+);
 
 interface SelectPropertyPanelProps {
   component: ComponentNode;
@@ -34,12 +32,45 @@ export const SelectPropertyPanel: React.FC<SelectPropertyPanelProps> = ({
 }) => {
   const { props } = component;
 
-  const { style, ...selfProperties } = props;
-
-  console.log('selfProperties', selfProperties);
-
   return (
     <div>
+      <div style={{ marginBottom: 12 }}>
+        <LabelDiv>字段名（name）</LabelDiv>
+        <Input
+          value={props.name}
+          onChange={(val) => onPropChange('name', val)}
+          placeholder="例如：gender"
+          size="mini"
+        />
+      </div>
+      <div style={{ marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <LabelDiv style={{ margin: 0 }}>必填</LabelDiv>
+        <Switch
+          checked={!!props.required}
+          onChange={(checked) => onPropChange('required', checked)}
+          size="small"
+        />
+      </div>
+      {props.required ? (
+        <div style={{ marginBottom: 12 }}>
+          <LabelDiv>必填提示</LabelDiv>
+          <Input
+            value={props.requiredMessage}
+            onChange={(val) => onPropChange('requiredMessage', val)}
+            placeholder="例如：请选择性别"
+            size="mini"
+          />
+        </div>
+      ) : null}
+      <div style={{ marginBottom: 12 }}>
+        <LabelDiv>默认值</LabelDiv>
+        <Input
+          value={props.defaultValue}
+          onChange={(val) => onPropChange('defaultValue', val)}
+          placeholder="（可选）"
+          size="mini"
+        />
+      </div>
       <div style={{ marginBottom: '12px' }}>
         {
           Object.keys(selfPropertiesMap).map((key) => {

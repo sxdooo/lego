@@ -14,5 +14,9 @@
     "@arco-design/web-react": "^2.66.5",
     "@lego/utils": "workspace:*",
     "@lego/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18 <19",
+    "react-dom": ">=18 <19"
   }
 }

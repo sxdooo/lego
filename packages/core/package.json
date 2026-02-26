@@ -14,5 +14,9 @@
     "@lego/utils": "workspace:*",
     "@lego/event-hub": "workspace:*",
     "zustand": "^4.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=18 <19",
+    "react-dom": ">=18 <19"
   }
 }

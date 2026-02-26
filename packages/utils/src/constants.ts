@@ -3,6 +3,7 @@ export const COMPONENT_TYPES = {
   INPUT: 'Input',
   SELECT: 'Select',
   TEXTAREA: 'Textarea',
+  BUTTON: 'Button',
   FORM: 'Form',
   CONTAINER: 'Container',
 } as const;

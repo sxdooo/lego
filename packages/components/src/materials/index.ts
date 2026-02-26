@@ -3,6 +3,7 @@ import { textMaterial } from '../renderers/Text/material';
 import { inputMaterial } from '../renderers/Input/material';
 import { selectMaterial } from '../renderers/Select/material';
 import { textareaMaterial } from '../renderers/Textarea/material';
+import { buttonMaterial } from '../renderers/Button/material';
 import { formMaterial, containerMaterial } from '../renderers/Container/material';
 
 export const componentMaterials: ComponentMaterial[] = [
@@ -10,6 +11,7 @@ export const componentMaterials: ComponentMaterial[] = [
   inputMaterial,
   selectMaterial,
   textareaMaterial,
+  buttonMaterial,
   formMaterial,
   containerMaterial,
 ];

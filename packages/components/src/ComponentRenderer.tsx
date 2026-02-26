@@ -6,6 +6,7 @@ import { InputRenderer } from './renderers/Input/Renderer';
 import { SelectRenderer } from './renderers/Select/Renderer';
 import { ContainerRenderer } from './renderers/Container/Renderer';
 import { TextareaRenderer } from './renderers/Textarea/Renderer';
+import { ButtonRenderer } from './renderers/Button/Renderer';
 import { COMPONENT_TYPES } from '@lego/utils';
 import { useEditorStore } from '@lego/core/src/store/editorStore';
 
@@ -33,6 +34,8 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component 
         return <SelectRenderer component={component} />;
       case COMPONENT_TYPES.TEXTAREA:
         return <TextareaRenderer component={component} />;
+      case COMPONENT_TYPES.BUTTON:
+        return <ButtonRenderer component={component} />;
       case COMPONENT_TYPES.FORM:
       case COMPONENT_TYPES.CONTAINER:
         return <ContainerRenderer component={component} />;
@@ -51,6 +54,16 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({ component 
             : '1px dashed #2b7dbc'
           : undefined,
         outlineOffset: showOutline ? '2px' : undefined,
+        cursor: 'move',
+      }}
+      draggable
+      onDragStart={(e) => {
+        e.stopPropagation();
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData(
+          'text/plain',
+          JSON.stringify({ kind: 'existing', componentId: component.id })
+        );
       }}
       onClick={(e) => {
         e.stopPropagation();

@@ -107,12 +107,15 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
     const state = get();
     const component = findComponentInTree(state.components, componentId);
     if (!component) return;
+    if (componentId === targetParentId) return;
+    if (containsIdInChildren(component, targetParentId)) return;
 
     set(state => {
       // 从原位置移除
       let newComponents = removeComponentFromTree(state.components, componentId);
       // 添加到新位置
-      newComponents = addComponentToTree(newComponents, component, targetParentId);
+      const moved = { ...component, parentId: targetParentId };
+      newComponents = addComponentToTree(newComponents, moved, targetParentId);
       return { components: newComponents };
     });
   },
@@ -168,4 +171,13 @@ function addComponentToTree(components: ComponentNode[], component: ComponentNod
     }
     return comp;
   });
+}
+
+function containsIdInChildren(component: ComponentNode, targetId: string): boolean {
+  if (!Array.isArray(component.children)) return false;
+  for (const child of component.children) {
+    if (child.id === targetId) return true;
+    if (containsIdInChildren(child, targetId)) return true;
+  }
+  return false;
 }
