@@ -1,5 +1,4 @@
 import React from 'react';
-import { ResizeBox } from '@arco-design/web-react';
 import { ComponentPanel } from './components/ComponentPanel';
 import { EditorCanvas } from './components/EditorCanvas';
 import { PropertyPanel } from './components/PropertyPanel';
@@ -13,15 +12,7 @@ export const VisualEditor: React.FC = () => {
       }}
     >
       <ComponentPanel />
-      {/* <ResizeBox
-        directions={['right']}
-        style={{
-          maxWidth: '80%',
-          textAlign: 'center',
-        }}
-      > */}
-        <EditorCanvas />
-      {/* </ResizeBox> */}
+      <EditorCanvas />
       <PropertyPanel />
     </div>
   );
