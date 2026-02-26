@@ -13,15 +13,15 @@ export const VisualEditor: React.FC = () => {
       }}
     >
       <ComponentPanel />
-      <ResizeBox
+      {/* <ResizeBox
         directions={['right']}
         style={{
           maxWidth: '80%',
           textAlign: 'center',
         }}
-      >
+      > */}
         <EditorCanvas />
-      </ResizeBox>
+      {/* </ResizeBox> */}
       <PropertyPanel />
     </div>
   );

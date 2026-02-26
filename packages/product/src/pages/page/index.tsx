@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
+import { Input } from '@arco-design/web-react';
 import { fetchPage, type PageRecord } from '../../services/pageApi';
 import { COMPONENT_TYPES } from '@lego/utils';
 import type { ComponentNode } from '@lego/utils';
@@ -23,11 +24,10 @@ const renderPreviewComponent = (component: ComponentNode): ReactNode => {
       );
     case COMPONENT_TYPES.INPUT:
       return (
-        <input
+        <Input
           style={style}
           placeholder={props.placeholder ?? '请输入'}
           defaultValue={props.value ?? ''}
-          disabled
         />
       );
     case COMPONENT_TYPES.SELECT: {
@@ -35,7 +35,7 @@ const renderPreviewComponent = (component: ComponentNode): ReactNode => {
         ? (props.options as OptionItem[])
         : [];
       return (
-        <select style={style} disabled defaultValue={props.value ?? ''}>
+        <select style={style} defaultValue={props.value ?? ''}>
           {options.length > 0 ? (
             options.map((option) => (
               <option
@@ -46,7 +46,7 @@ const renderPreviewComponent = (component: ComponentNode): ReactNode => {
               </option>
             ))
           ) : (
-            <option value='' disabled>暂无选项</option>
+            <option value=''>暂无选项</option>
           )}
         </select>
       );
@@ -58,7 +58,6 @@ const renderPreviewComponent = (component: ComponentNode): ReactNode => {
           placeholder={props.placeholder ?? '请输入'}
           rows={props.rows ?? 4}
           defaultValue={props.value ?? ''}
-          disabled
         />
       );
     case COMPONENT_TYPES.CONTAINER:
@@ -91,7 +90,7 @@ const renderComponentTree = (components: ComponentNode[]) => (
 
 export default function PageViewer() {
   const { pageId } = useParams();
-  const [page, setPage] = useState<PageRecord | null>(null);
+  const [pageInfo, setPageInfo] = useState<PageRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
@@ -101,7 +100,7 @@ export default function PageViewer() {
     setError(undefined);
 
     fetchPage(pageId)
-      .then((data) => setPage(data))
+      .then((data) => setPageInfo(data))
       .catch((err) => setError(err instanceof Error ? err.message : '加载失败'))
       .finally(() => setLoading(false));
   }, [pageId]);
@@ -122,7 +121,7 @@ export default function PageViewer() {
     );
   }
 
-  if (!page) {
+  if (!pageInfo) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', color: '#999' }}>
         未找到对应页面
@@ -141,9 +140,9 @@ export default function PageViewer() {
         }}
       >
         <div>
-          <h2 style={{ margin: 0 }}>{page.name}</h2>
+          <h2 style={{ margin: 0 }}>{pageInfo.name}</h2>
           <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>
-            页面ID：{page.id} · 创建于 {new Date(page.createdAt).toLocaleString()}
+            页面ID：{pageInfo.id} · 创建于 {new Date(pageInfo.createdAt).toLocaleString()}
           </p>
         </div>
       </div>
@@ -156,8 +155,8 @@ export default function PageViewer() {
           boxShadow: '0 1px 6px rgba(0,0,0,0.08)',
         }}
       >
-        {page.components?.length
-          ? renderComponentTree(page.components)
+        {pageInfo.components?.length
+          ? renderComponentTree(pageInfo.components)
           : (
             <div style={{ textAlign: 'center', color: '#999' }}>
               该页面暂无组件内容
