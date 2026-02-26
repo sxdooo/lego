@@ -23,3 +23,18 @@ exports.create = async (data: any) => {
   return repo().save(record);
 };
 
+exports.updateById = async (id: number | string, data: any) => {
+  const page = await repo().findOne({ where: { _id: new ObjectId(id) } });
+  if (!page) throw new Error('Page not found');
+
+  const next = { ...page };
+  if (typeof data?.name === 'string') {
+    next.name = data.name;
+  }
+  if (Array.isArray(data?.components)) {
+    next.components = data.components;
+  }
+
+  return repo().save(next);
+};
+

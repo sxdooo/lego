@@ -27,11 +27,13 @@ export default function Editor() {
   }, [components]);
 
   return (
-    <div style={{ height: 'calc(100vh - 92px)', background: '--color-bg-2' }}>
+    <div style={{ height: 'calc(100vh - 92px)', background: '--color-bg-2', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '5px 10px', background: '#fff', borderBottom: '1px solid #ddd' }}>
         <Button onClick={handleSave} type='primary' size='mini'>保存</Button>
       </div>
-      <VisualEditor />
+      <div style={{ flex: 1, minHeight: 0 }}>
+        <VisualEditor />
+      </div>
     </div>
   );
 }

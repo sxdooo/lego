@@ -15,6 +15,7 @@ interface EditorActions {
   selectComponent: (id: string) => void;
   setDraggingComponent: (component?: BaseComponent) => void;
   moveComponent: (componentId: string, targetParentId: string) => void;
+  setComponents: (components: ComponentNode[]) => void;
 }
 
 export const useEditorStore = create<EditorState & EditorActions>((set, get) => ({
@@ -113,6 +114,14 @@ export const useEditorStore = create<EditorState & EditorActions>((set, get) => 
       // 添加到新位置
       newComponents = addComponentToTree(newComponents, component, targetParentId);
       return { components: newComponents };
+    });
+  },
+
+  setComponents: (components) => {
+    set({
+      components: Array.isArray(components) ? components : [],
+      selectedId: undefined,
+      draggingComponent: undefined,
     });
   },
 }));

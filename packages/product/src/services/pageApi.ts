@@ -41,3 +41,19 @@ export const fetchPage = async (pageId: string): Promise<PageRecord> => {
   return response.json();
 };
 
+export const updatePage = async (
+  pageId: string,
+  payload: SavePagePayload
+): Promise<PageRecord> => {
+  const response = await fetch(`${API_BASE}/api/pages/${pageId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  await ensureSuccess(response);
+  return response.json();
+};
+

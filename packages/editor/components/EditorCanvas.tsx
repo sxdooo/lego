@@ -33,7 +33,7 @@ export const EditorCanvas: React.FC = () => {
         flex: 1,
         minWidth: '400px',
         position: 'relative',
-        height: 'calc(100vh - 92px)',
+        height: '100%',
         overflowY: 'auto',
         background: '#fff',
         border: '0.5px solid #ddd',

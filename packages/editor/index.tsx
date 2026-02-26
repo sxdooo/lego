@@ -17,3 +17,5 @@ export const VisualEditor: React.FC = () => {
     </div>
   );
 };
+
+export { PropertyPanel };

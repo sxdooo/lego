@@ -68,7 +68,20 @@ const propertyStyleMap = {
 export const PropertyPanel: React.FC = () => {
   const { selectedId, components, updateComponent } = useEditorStore();
 
-  const selectedComponent = components.find(comp => comp.id === selectedId);
+  const findSelectedComponent = (nodes: any[], id?: string): any | undefined => {
+    if (!id) return undefined;
+    for (const node of nodes) {
+      if (node?.id === id) return node;
+      const children = node?.children;
+      if (Array.isArray(children) && children.length) {
+        const found = findSelectedComponent(children, id);
+        if (found) return found;
+      }
+    }
+    return undefined;
+  };
+
+  const selectedComponent = findSelectedComponent(components as any[], selectedId);
 
   const handlePropChange = (propName: string, value: any) => {
     if (selectedComponent) {
