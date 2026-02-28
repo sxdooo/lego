@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useEditorStore } from '@lego/core/src/store/editorStore';
-import { Input, Collapse, ColorPicker } from '@arco-design/web-react';
+import { Button, Input, Collapse, ColorPicker, Message } from '@arco-design/web-react';
 import { componentTypeToPropertyPanel } from '@lego/components/src/componentRegistry';
 import './index.less';
 
@@ -82,6 +82,13 @@ export const PropertyPanel: React.FC = () => {
   };
 
   const selectedComponent = findSelectedComponent(components as any[], selectedId);
+  const eventsObj = selectedComponent?.props?.events ?? {};
+  const initialEventsText = useMemo(() => JSON.stringify(eventsObj ?? {}, null, 2), [eventsObj]);
+  const [eventsText, setEventsText] = useState(initialEventsText);
+
+  useEffect(() => {
+    setEventsText(initialEventsText);
+  }, [initialEventsText, selectedComponent?.id]);
 
   const handlePropChange = (propName: string, value: any) => {
     if (selectedComponent) {
@@ -111,6 +118,17 @@ export const PropertyPanel: React.FC = () => {
       </div>
     );
   }
+
+  const applyEvents = () => {
+    try {
+      const trimmed = String(eventsText ?? '').trim();
+      const parsed = trimmed ? JSON.parse(trimmed) : {};
+      handlePropChange('events', parsed);
+      Message.success('已应用 events');
+    } catch {
+      Message.error('events JSON 格式错误，无法应用');
+    }
+  };
 
   return (
     <div
@@ -181,6 +199,31 @@ export const PropertyPanel: React.FC = () => {
                   }
                 </div>
               ))}
+            </CollapseItem>
+          </Collapse>
+
+          <Collapse
+            bordered={false}
+            defaultActiveKey={[]}
+            style={{ border: 'none' }}
+            className="my-property-collapse"
+            expandIconPosition='right'
+          >
+            <CollapseItem header='事件绑定（props.events）' name='1' contentStyle={{ padding: '0', background: '#fff' }}>
+              <div style={{ marginBottom: 8, fontSize: 12, color: '#666' }}>
+                当前支持：onClick / onChange（数组形式，按顺序执行）
+              </div>
+              <Input.TextArea
+                value={eventsText}
+                onChange={(v) => setEventsText(v)}
+                placeholder='例如：{ "onClick": [ { "type": "navigate", "to": "/page/xxx" } ] }'
+                autoSize={{ minRows: 6, maxRows: 16 }}
+              />
+              <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button size="mini" type="primary" onClick={applyEvents}>
+                  应用
+                </Button>
+              </div>
             </CollapseItem>
           </Collapse>
 

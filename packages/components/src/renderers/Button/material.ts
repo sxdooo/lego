@@ -8,6 +8,24 @@ export const buttonMaterial: ComponentMaterial = {
   defaultProps: {
     text: '提交',
     style: {},
+    events: {
+      onClick: [
+        {
+          type: 'submitForm',
+          formScope: 'closest',
+          request: {
+            method: 'POST',
+            url: '/api/submit',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            bodySource: 'formValues',
+          },
+          successMessage: '提交成功',
+          errorMessage: '提交失败',
+        },
+      ],
+    },
     action: {
       type: 'submitForm',
       formScope: 'closest',

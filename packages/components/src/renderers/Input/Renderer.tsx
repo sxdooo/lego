@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from '@arco-design/web-react';
 import type { ComponentNode } from '@lego/utils';
 import { useEditorStore } from '@lego/core/src/store/editorStore';
 
@@ -11,7 +12,7 @@ export const InputRenderer: React.FC<InputRendererProps> = ({ component }) => {
   const selectComponent = useEditorStore(state => state.selectComponent);
 
   return (
-    <input
+    <Input
       placeholder={placeholder}
       style={style}
       onClick={(e) => {
