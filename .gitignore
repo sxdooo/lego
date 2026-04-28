@@ -4,3 +4,4 @@ packages/*/dist
 dist/
 *.tar.gz
 EOF
+node_modules
